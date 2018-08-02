@@ -87,7 +87,17 @@
                         icon: 'el-icon-error',
                         index: '404',
                         title: '404页面'
-                    }
+                    },{
+                        icon: 'el-icon-date',
+                        index: 'system',
+                        title: '系统设置',
+                        subs: [
+                            {
+                                index: 'org',
+                                title: '组织机构管理'
+                            }
+                        ]
+                    },
                 ]
             }
         },

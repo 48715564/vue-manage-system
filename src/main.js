@@ -10,6 +10,27 @@ import "babel-polyfill";
 Vue.use(ElementUI, { size: 'small' });
 Vue.prototype.$axios = axios;
 
+axios.interceptors.request.use((config) => {
+    if (localStorage.token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
+        config['headers']['common']['token'] = localStorage.token;
+    }
+    return config;
+}, (err) => {
+    // 请求失败的处理
+    this.$message.error("网络异常！");
+});
+
+axios.interceptors.response.use(response => {
+    if(response.data&&response.data.errorCode=='401'){
+        localStorage.token = '';
+        location.reload(true);
+        this.$message.error(response.data.msg);
+    }
+    return response
+}, (err) => {
+    this.$message.error("服务器异常！");
+});
+
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
     const role = localStorage.getItem('ms_username');
