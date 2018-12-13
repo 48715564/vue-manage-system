@@ -3,6 +3,7 @@ import App from './App';
 import router from './router';
 import axios from 'axios';
 import ElementUI from 'element-ui';
+import { Message,Loading} from 'element-ui';//引入elm组件
 import 'element-ui/lib/theme-chalk/index.css';    // 默认主题
 // import '../static/css/theme-green/index.css';       // 浅绿色主题
 import "babel-polyfill";
@@ -10,31 +11,50 @@ import "babel-polyfill";
 Vue.use(ElementUI, { size: 'small' });
 Vue.prototype.$axios = axios;
 
+let loadingInstance;//定时器
+
 axios.interceptors.request.use((config) => {
-    if (localStorage.token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
-        config['headers']['common']['token'] = localStorage.token;
+    loadingInstance = Loading.service({
+        lock: true,
+        text: '努力拉取中 ~>_<~',
+        background: 'rgba(0, 0, 0, 0.7)'
+    })
+    if (localStorage.token&&!config.headers.Authorization) {  // 判断是否存在token，如果存在的话，则每个http header都加上Authorization
+        //todo 判断token是否过期
+        config['headers']['Authorization'] = "Bearer "+localStorage.token;
     }
     return config;
 }, (err) => {
+    loadingInstance.close();
     // 请求失败的处理
     this.$message.error("网络异常！");
 });
-
+let btn = this;
 axios.interceptors.response.use(response => {
-    if(response.data&&response.data.errorCode=='401'){
+    loadingInstance.close();
+    if(response.data&&(response.data.code=='403'||response.data.code=='400'||response.data.code=='500')){
+        Message.error(response.data.message);
+        return;
+    }else if(response.data&&response.data.code=='401'){
         localStorage.token = '';
+        localStorage.setItem('ms_username','');
+        alert(response.data.message);
         location.reload(true);
-        this.$message.error(response.data.msg);
     }
     return response
 }, (err) => {
-    this.$message.error("服务器异常！");
+    loadingInstance.close();
+    Message.error("服务器异常！");
 });
 
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
     const role = localStorage.getItem('ms_username');
-    if(!role && to.path !== '/login'){
+    //判断是否登录，如果已经登录直接跳转到主页
+    if( role && to.path == '/login'){
+        next('/');
+    }
+    else if(!role && to.path !== '/login'){
         next('/login');
     }else if(to.meta.permission){
         // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已

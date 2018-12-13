@@ -10,18 +10,6 @@ function resolve(dir) {
 }
 
 
-const DEFAULT_ENV = {
-    BASE_URL: '"http://127.0.0.1:8808"',
-    POST_URL: '""',
-    DOMAIN: '""',
-};
-
-Object.keys(DEFAULT_ENV).forEach((k) => {
-    if (process.env[k]) {
-        DEFAULT_ENV[k] = JSON.stringify(process.env[k]);
-    }
-});
-
 module.exports = {
     context: path.resolve(__dirname, '../'),
     entry: {
@@ -42,11 +30,6 @@ module.exports = {
             'static': path.resolve(__dirname, '../static'),
         }
     },
-    plugins: [
-        new webpack.DefinePlugin({
-            'process.env': DEFAULT_ENV
-        }),
-    ],
     module: {
         rules: [
             {

@@ -111,6 +111,7 @@
             bus.$on('collapse', msg => {
                 this.collapse = msg;
             })
+            //todo 通过用户名请求用户的菜单
         }
     }
 </script>

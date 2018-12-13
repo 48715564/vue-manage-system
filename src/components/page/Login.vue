@@ -45,13 +45,13 @@
                     if (valid) {
                         const result = AuthService.login(this.ruleForm.username, this.ruleForm.password)
                             .then((res) => {
-                                if (res.data.success) {
-                                    localStorage.token = res.data.result.token;
+                                if (res.data) {
+                                    localStorage.setItem('token', res.data);
                                     localStorage.setItem('ms_username', this.ruleForm.username);
                                     this.$router.push('/');
                                 } else {
                                     this.ruleForm.password = '';
-                                    this.$message.error(res.data.msg);
+                                    this.$message.error(res.data.message);
                                 }
                             }).catch((res) => {
 
