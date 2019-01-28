@@ -3,6 +3,7 @@ import App from './App';
 import router from './router';
 import axios from 'axios';
 import ElementUI from 'element-ui';
+import store from './store'
 import { Message,Loading} from 'element-ui';//引入elm组件
 import 'element-ui/lib/theme-chalk/index.css';    // 默认主题
 // import '../static/css/theme-green/index.css';       // 浅绿色主题
@@ -37,11 +38,12 @@ axios.interceptors.response.use(response => {
         return;
     }else if(response.data&&response.data.code=='401'){
         localStorage.token = '';
-        localStorage.setItem('ms_username','');
+        store.commit('user/updateUserInfo',null);
+        // localStorage.setItem('ms_username','');
         alert(response.data.message);
         location.reload(true);
     }
-    return response
+    return response;
 }, (err) => {
     loadingInstance.close();
     Message.error("服务器异常！");
@@ -72,6 +74,7 @@ router.beforeEach((to, from, next) => {
 })
 
 new Vue({
+    store,
     router,
     render: h => h(App)
 }).$mount('#app');

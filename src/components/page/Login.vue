@@ -21,6 +21,7 @@
 
 <script>
     import AuthService from '@/services/AuthService';
+    import { mapActions } from 'vuex'
 
     export default {
         data: function () {
@@ -40,15 +41,18 @@
             }
         },
         methods: {
+            ...mapActions('user',{
+                updateUserInfo: 'updateUserInfo' // 将 `this.add()` 映射为 `this.$store.dispatch('increment')`
+            }),
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         const result = AuthService.login(this.ruleForm.username, this.ruleForm.password)
                             .then((res) => {
                                 if (res.data) {
-                                    localStorage.setItem('token', res.data);
-                                    localStorage.setItem('ms_username', this.ruleForm.username);
+                                    localStorage.setItem('token', res.data.access_token);
                                     this.$router.push('/');
+                                    this.updateUserInfo();
                                 } else {
                                     this.ruleForm.password = '';
                                     this.$message.error(res.data.message);

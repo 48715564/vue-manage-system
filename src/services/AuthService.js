@@ -14,6 +14,8 @@ const login = (username, password) => axios.post(CONFIG.api.userLogin, querystri
     headers: {
     'Authorization': `Basic ${Base64.encode(CLIENT_ID+':'+SECRET)}`
 }});
+
+const getUserInfo = () => axios.post(CONFIG.api.userInfo);
 export default {
-  login,
+  login, getUserInfo
 };
