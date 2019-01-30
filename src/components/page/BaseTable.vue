@@ -19,20 +19,20 @@
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
             </el-form-item>
         </div>
-        <PgaeTable url="static/vuetable.json" @selection-change="changeCheck">
+        <PageTable url="static/vuetable.json" ref="dataTable" @selection-change="changeCheck">
             <el-table-column prop="date" label="日期" sortable width="150">
             </el-table-column>
             <el-table-column prop="name" label="姓名" width="120">
             </el-table-column>
             <el-table-column prop="address" label="地址">
             </el-table-column>
-        </PgaeTable>
+        </PageTable>
     </ListLayout>
 </template>
 
 <script>
     import ListLayout from '@/components/common/ListLayout';
-    import PgaeTable from '@/components/common/PgaeTable';
+    import PageTable from '@/components/common/PageTable';
 
     export default {
         data() {
@@ -46,7 +46,7 @@
         },
         components: {
             ListLayout,
-            PgaeTable
+            PageTable
         },
         computed: {},
         methods: {
@@ -54,6 +54,7 @@
                 console.log(checkItems);
             },
             search(){
+                this.$refs.dataTable.search({name:'张三'});
                 console.log("search");
             },
             delAll(){

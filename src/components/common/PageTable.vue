@@ -74,6 +74,7 @@
             search(searchForm) {
                 this.is_search = true;
                 this.searchData=searchForm;
+                this.getData();
             },
             handleEdit(index, row) {
                 this.idx = index;
