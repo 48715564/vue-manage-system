@@ -1,11 +1,11 @@
 <template>
     <el-dialog :title="getTitle" :visible.sync="visible" @close="cancel" width="30%">
-        <el-form ref="form" :rules="rules" :model="formData" label-width="50px">
+        <el-form  ref="form" :disabled="getIsView" :rules="rules" :model="formData" label-width="50px">
             <slot></slot>
         </el-form>
         <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="saveEdit">确 定</el-button>
             <el-button @click="cancel">取 消</el-button>
+            <el-button v-if="!getIsView" type="primary" @click="saveEdit">确 定</el-button>
         </span>
     </el-dialog>
 </template>
@@ -19,6 +19,10 @@
             },
             formData : {
                 required : true
+            },
+            isView : {
+                required : true,
+                default : false,
             },
             editvisible : {
                 required : true,
@@ -42,6 +46,9 @@
             },
             getFormData(){
                 return this.formData;
+            },
+            getIsView(){
+                return this.isView;
             }
         },
         watch: {

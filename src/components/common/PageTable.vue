@@ -6,7 +6,7 @@
             <el-table-column label="操作" width="220">
                 <template slot-scope="scope">
                     <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <el-button type="text" icon="el-icon-view" @click="handleEdit(scope.$index, scope.row)">查看</el-button>
+                    <el-button type="text" icon="el-icon-view" @click="handleView(scope.$index, scope.row)">查看</el-button>
                     <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                 </template>
             </el-table-column>
@@ -66,7 +66,6 @@
             // 获取 easy-mock 的模拟数据
             getData() {
                 let searchJson = {...this.getDefaultSearchData,...this.searchData,cur_page:this.cur_page};
-                console.log(searchJson);
                 this.$axios.get(this.url, {params:searchJson}).then((res) => {
                     this.tableData = res.data.list;
                 })
@@ -78,12 +77,30 @@
             },
             handleEdit(index, row) {
                 this.idx = index;
-                const item = this.tableData[index];
-                this.$emit('edit-click',item);
+//                const item = this.tableData[index];
+                this.$emit('edit-click',row);
+            },
+            handleView(index, row){
+                this.idx = index;
+//                const item = this.tableData[index];
+                this.$emit('view-click',row);
             },
             handleDelete(index, row) {
                 this.idx = index;
-                this.delVisible = true;
+//                const item = this.tableData[index];
+                this.$confirm('是否确认删除改条数据?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$emit('delete-click',row);
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
             },
             handleSelectionChange(val) {
                 this.multipleSelection = val;

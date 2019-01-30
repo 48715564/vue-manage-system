@@ -20,7 +20,7 @@
             </el-form-item>
 
         </div>
-        <PageTable url="static/vuetable.json" ref="dataTable" @selection-change="changeCheck" @edit-click="edit">
+        <PageTable url="static/vuetable.json" ref="dataTable" @selection-change="changeCheck" @edit-click="editRow" @delete-click="deleteRow" @view-click="viewRow">
             <el-table-column prop="date" label="日期" sortable width="150">
             </el-table-column>
             <el-table-column prop="name" label="姓名" width="120">
@@ -28,7 +28,7 @@
             <el-table-column prop="address" label="地址">
             </el-table-column>
         </PageTable>
-        <FormDialog :title="formDialogTitle" :formData="checkRows" @save-click="save" :editvisible.sync="formDialogVisible" @cancel-click="cancel">
+        <FormDialog :title="formDialogTitle" :isView="isView" :formData="checkRows" @save-click="save" :editvisible.sync="formDialogVisible" @cancel-click="cancel">
             <el-form-item label="姓名">
                 <el-input v-model="checkRows.name"></el-input>
             </el-form-item>
@@ -51,7 +51,9 @@
                 },
                 formDialogTitle :'',
                 formDialogVisible : false,
-                checkRows:{}
+                isView : false,
+                checkRows:{},
+                checkItmes:[]
             }
         },
         created() {
@@ -65,10 +67,10 @@
         methods: {
             changeCheck(checkItems){
                 console.log(checkItems);
+                this.checkItmes=checkItems;
             },
             search(){
                 this.$refs.dataTable.search(this.searchFormData);
-                console.log("search");
             },
             delAll(){
                 console.log("delAll");
@@ -77,14 +79,26 @@
                 this.checkRows={};
                 this.formDialogTitle = "新增";
                 this.formDialogVisible = true;
+                this.isView =false;
             },
-            edit(item){
+            editRow(item){
                 this.checkRows = item;
                 this.formDialogTitle = "编辑";
                 this.formDialogVisible = true;
+                this.isView =false;
+            },
+            deleteRow(item){
+                console.log("删除->",item);
+            },
+            viewRow(item){
+                this.checkRows = item;
+                this.formDialogTitle = "查看";
+                this.formDialogVisible = true;
+                this.isView =true;
             },
             save(form){
                 console.log(form);
+                this.formDialogVisible = false;
             },
             cancel(){
                 this.formDialogVisible=false;
