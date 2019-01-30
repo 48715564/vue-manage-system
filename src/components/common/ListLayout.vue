@@ -2,7 +2,7 @@
     <main-layout :title="getTitle">
         <div class="handle-box">
             <!-- 查询表单 -->
-            <el-form :inline="true" class="demo-form-inline">
+            <el-form :inline="true" class="demo-form-inline" :model="getFormData">
                 <slot name="searchForm"></slot>
             </el-form>
         </div>
@@ -19,6 +19,9 @@
                 required: true,
                 default: []
             },
+            formData : {
+                required : true
+            }
 
         },
         components: {
@@ -28,6 +31,9 @@
             getTitle() {
                 return this.title;
             },
+            getFormData(){
+                return this.formData;
+            }
         },
     }
 

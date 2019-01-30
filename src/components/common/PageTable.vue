@@ -1,13 +1,13 @@
 <template>
     <div>
-        <el-table :data="tableData" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
+        <el-table :data="tableData" border style="width: 100%;" ref="multipleTable" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55"></el-table-column>
             <slot></slot>
             <el-table-column label="操作" width="220">
                 <template slot-scope="scope">
-                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">查看</el-button>
+                    <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                    <el-button type="text" icon="el-icon-view" @click="handleEdit(scope.$index, scope.row)">查看</el-button>
+                    <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -79,12 +79,7 @@
             handleEdit(index, row) {
                 this.idx = index;
                 const item = this.tableData[index];
-                this.form = {
-                    name: item.name,
-                    date: item.date,
-                    address: item.address
-                }
-                this.editVisible = true;
+                this.$emit('edit-click',item);
             },
             handleDelete(index, row) {
                 this.idx = index;
@@ -98,3 +93,8 @@
     }
 
 </script>
+<style scoped>
+    .red{
+        color: #ff0000;
+    }
+</style>
