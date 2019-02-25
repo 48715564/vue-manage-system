@@ -47,7 +47,6 @@
                 this.collapse = msg;
             })
 //            this.updateMenuList();
-            console.log(this.menuList);
         }
     }
 </script>

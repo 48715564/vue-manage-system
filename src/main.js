@@ -20,7 +20,6 @@ axios.interceptors.request.use((config) => {
         text: '努力拉取中 ~>_<~',
         background: 'rgba(0, 0, 0, 0.7)'
     })
-    debugger
     if (sessionStorage.getItem('token')&&!config.headers.Authorization) {  // 判断是否存在token，如果存在的话，则每个http header都加上Authorization
         config['headers']['Authorization'] = "Bearer "+sessionStorage.getItem('token');
     }
@@ -36,13 +35,13 @@ axios.interceptors.response.use(response => {
     loadingInstance.close();
     if(response.data&&(response.data.code=='403'||response.data.code=='400'||response.data.code=='500')){
         Message.error(response.data.message);
-        return;
+        return ;
     }else if(response.data&&response.data.code=='401'){
         store.commit('user/updateUserInfo',null);
-        sessionStorage.setItem('token',null);
+        sessionStorage.setItem('token','');
         location.reload(true);
     }
-    return response;
+    return response.data;
 }, (err) => {
     loadingInstance.close();
     Message.error("服务器异常！");
@@ -50,6 +49,7 @@ axios.interceptors.response.use(response => {
 
 if(sessionStorage.getItem('token')){
     store.dispatch('user/updateUserInfo');
+    store.dispatch('menu/updateMenuList');
 }
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {

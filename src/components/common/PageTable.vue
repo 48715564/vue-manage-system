@@ -66,6 +66,7 @@
             // 获取 easy-mock 的模拟数据
             getData() {
                 let searchJson = {...this.getDefaultSearchData,...this.searchData,cur_page:this.cur_page};
+                console.log(searchJson);
                 this.$axios.get(this.url, {params:searchJson}).then((res) => {
                     this.tableData = res.data.list;
                 })

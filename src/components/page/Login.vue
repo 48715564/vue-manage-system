@@ -50,13 +50,10 @@
                     if (valid) {
                         const result = AuthService.login(this.ruleForm.username, this.ruleForm.password)
                             .then((res) => {
-                                if (res.data) {
-                                    sessionStorage.setItem('token',res.data.access_token)
+                                if (res) {
+                                    sessionStorage.setItem('token',res.access_token)
                                     this.$router.push('/');
                                     this.updateUserInfo();
-                                } else {
-                                    this.ruleForm.password = '';
-                                    this.$message.error(res.data.message);
                                 }
                             }).catch((res) => {
 

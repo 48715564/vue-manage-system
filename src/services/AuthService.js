@@ -15,7 +15,8 @@ const login = (username, password) => axios.post(CONFIG.api.userLogin, querystri
     'Authorization': `Basic ${Base64.encode(CLIENT_ID+':'+SECRET)}`
 }});
 
-const getUserInfo = () => axios.post(CONFIG.api.userInfo);
+const getUserInfo = () => axios.get(CONFIG.api.userInfo);
+const getMeunList = () => axios.get(CONFIG.api.menuInfo);
 export default {
-  login, getUserInfo
+  login, getUserInfo,getMeunList
 };

@@ -20,7 +20,7 @@ export default new Router({
                     meta: { title: '系统首页' }
                 },
                 {
-                    path: '/table',
+                    path: 'user/list',
                     component: resolve => require(['../components/page/BaseTable.vue'], resolve),
                     meta: { title: '基础表格' }
                 },
