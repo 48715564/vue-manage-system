@@ -20,9 +20,9 @@ axios.interceptors.request.use((config) => {
         text: '努力拉取中 ~>_<~',
         background: 'rgba(0, 0, 0, 0.7)'
     })
-    if (localStorage.token&&!config.headers.Authorization) {  // 判断是否存在token，如果存在的话，则每个http header都加上Authorization
-        //todo 判断token是否过期
-        config['headers']['Authorization'] = "Bearer "+localStorage.token;
+    debugger
+    if (sessionStorage.getItem('token')&&!config.headers.Authorization) {  // 判断是否存在token，如果存在的话，则每个http header都加上Authorization
+        config['headers']['Authorization'] = "Bearer "+sessionStorage.getItem('token');
     }
     return config;
 }, (err) => {
@@ -30,6 +30,7 @@ axios.interceptors.request.use((config) => {
     // 请求失败的处理
     this.$message.error("网络异常！");
 });
+
 let btn = this;
 axios.interceptors.response.use(response => {
     loadingInstance.close();
@@ -37,10 +38,8 @@ axios.interceptors.response.use(response => {
         Message.error(response.data.message);
         return;
     }else if(response.data&&response.data.code=='401'){
-        localStorage.token = '';
         store.commit('user/updateUserInfo',null);
-        // localStorage.setItem('ms_username','');
-        alert(response.data.message);
+        sessionStorage.setItem('token',null);
         location.reload(true);
     }
     return response;
@@ -49,18 +48,21 @@ axios.interceptors.response.use(response => {
     Message.error("服务器异常！");
 });
 
+if(sessionStorage.getItem('token')){
+    store.dispatch('user/updateUserInfo');
+}
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
-    const role = localStorage.getItem('ms_username');
+    const token = sessionStorage.getItem('token');
     //判断是否登录，如果已经登录直接跳转到主页
-    if( role && to.path == '/login'){
+    if( token && to.path == '/login'){
         next('/');
     }
-    else if(!role && to.path !== '/login'){
+    else if(!token && to.path !== '/login'){
         next('/login');
     }else if(to.meta.permission){
         // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
-        role === 'admin' ? next() : next('/403');
+        // user === 'admin' ? next() : next('/403');
     }else{
         // 简单的判断IE10及以下不进入富文本编辑器，该组件不兼容
         if(navigator.userAgent.indexOf('MSIE') > -1 && to.path === '/editor'){

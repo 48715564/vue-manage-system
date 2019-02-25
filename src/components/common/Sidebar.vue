@@ -46,7 +46,8 @@
             bus.$on('collapse', msg => {
                 this.collapse = msg;
             })
-            this.updateMenuList()
+//            this.updateMenuList();
+            console.log(this.menuList);
         }
     }
 </script>

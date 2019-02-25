@@ -75,7 +75,6 @@ const state = {
 const mutations = {
     updateMenuList(state,menuList) {
         state.menuList=menuList;
-        console.log(menuList);
     },
 }
 

@@ -42,7 +42,8 @@
         },
         methods: {
             ...mapActions('user',{
-                updateUserInfo: 'updateUserInfo' // 将 `this.add()` 映射为 `this.$store.dispatch('increment')`
+                updateUserInfo: 'updateUserInfo', // 将 `this.add()` 映射为 `this.$store.dispatch('increment')`
+                updateToken: 'updateToken'
             }),
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
@@ -50,7 +51,7 @@
                         const result = AuthService.login(this.ruleForm.username, this.ruleForm.password)
                             .then((res) => {
                                 if (res.data) {
-                                    localStorage.setItem('token', res.data.access_token);
+                                    sessionStorage.setItem('token',res.data.access_token)
                                     this.$router.push('/');
                                     this.updateUserInfo();
                                 } else {
