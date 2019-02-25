@@ -16,14 +16,19 @@ const actions = {
         AuthService.getUserInfo().then() .then((res) => {
             commit('updateUserInfo',res.data);
         });
-        const savedCartItems = [...state.items];
-
     },
+}
+//getters
+const getters = {
+    userInfo: state => {
+        return state.userInfo
+    }
 }
 
 export default {
     namespaced: true,
     state,
     actions,
-    mutations
+    mutations,
+    getters
 }
