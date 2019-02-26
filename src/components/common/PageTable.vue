@@ -78,12 +78,10 @@
             },
             handleEdit(index, row) {
                 this.idx = index;
-//                const item = this.tableData[index];
                 this.$emit('edit-click',row);
             },
             handleView(index, row){
                 this.idx = index;
-//                const item = this.tableData[index];
                 this.$emit('view-click',row);
             },
             handleDelete(index, row) {

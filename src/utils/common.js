@@ -1,4 +1,5 @@
 const getMenuTree = (menuList)=>{
+    console.log(menuList);
   //找到所有类型为菜单的节点
     let menus = menuList.filter(item =>{ if(item.isMenu === 1 && item.pid!=0)return true});
   //找到所有pcode=root的一级菜单

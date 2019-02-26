@@ -1,5 +1,5 @@
 <template>
-    <ListLayout :title="title" :formData="searchFormData">
+    <ListLayout :title="title" :formData="searchFormData" pageDataUrl="static/vuetable.json">
         <template slot="searchForm">
             <el-form-item label="筛选关键词">
                 <!-- input 文本框-->

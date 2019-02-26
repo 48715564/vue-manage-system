@@ -15,7 +15,7 @@
                 </el-form-item>
             </el-form>
         </div>
-        <PageTable url="static/vuetable.json" ref="dataTable" @selection-change="changeCheck" @edit-click="editRow" @delete-click="deleteRow" @view-click="viewRow">
+        <PageTable :url="getPageUrl" ref="dataTable" @selection-change="changeCheck" @edit-click="editRow" @delete-click="deleteRow" @view-click="viewRow">
             <slot name="dataTable"></slot>
         </PageTable>
         <FormDialog :title="formDialogTitle" :isView="isView" :formData="checkRows" @save-click="save" :editvisible.sync="formDialogVisible" @cancel-click="cancel">
@@ -38,7 +38,10 @@
             },
             formData : {
                 required : true
-            }
+            },
+            pageDataUrl : {
+                required: true
+            },
         },
         data() {
             return {
@@ -51,7 +54,6 @@
         },
         methods: {
             changeCheck(checkItems){
-                console.log(checkItems);
                 this.checkItmes=checkItems;
             },
             search(){
@@ -82,7 +84,6 @@
                 this.isView =true;
             },
             save(form){
-                console.log(form);
                 this.formDialogVisible = false;
             },
             cancel(){
@@ -100,6 +101,9 @@
             },
             getFormData(){
                 return this.formData;
+            },
+            getPageUrl(){
+                return this.pageDataUrl
             }
         },
     }
